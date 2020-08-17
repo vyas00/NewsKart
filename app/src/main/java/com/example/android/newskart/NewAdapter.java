@@ -24,9 +24,9 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
     private static final String TAG = "NewAdapter";
 
     Context context;
-    private  ArrayList<New> news;
+    private  ArrayList<newsItem> news;
 
-    public NewAdapter(Context context, ArrayList<New> news) {
+    public NewAdapter(Context context, ArrayList<newsItem> news) {
         this.context=context;
         this.news=news;
     }
@@ -46,9 +46,9 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
             MainActivity mainActivity=new MainActivity();
             mainActivity.setvisibilityChanges();
             int position=getAdapterPosition();
-            New currentNew = news.get(position);
-            MainActivity.setContentAfterVisibility(currentNew.getContent());
-            mainActivity.returnUrl(currentNew.getBrowserUrl());
+            newsItem currentNewsItem = news.get(position);
+            MainActivity.setContentAfterVisibility(currentNewsItem.getContent());
+            mainActivity.returnUrl(currentNewsItem.getBrowserUrl());
         }
     }
     @NonNull
@@ -63,9 +63,9 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final NewAdapter.ViewHolder holder, int position) {
-        final New currentNew = news.get(position);
+        final newsItem currentNewsItem = news.get(position);
 
-        holder.titleView.setText(currentNew.getTitle());
+        holder.titleView.setText(currentNewsItem.getTitle());
 
         String Ddate;
         String Ttime;
@@ -75,7 +75,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
         String displayt;
         String displayd;
 
-        String mixdatetime = currentNew.getDate();
+        String mixdatetime = currentNewsItem.getDate();
         Log.d(TAG, "onBindViewHolder: "+ mixdatetime);
 
         String[] parts = mixdatetime.split(LOCATION_SEPARATOR);

@@ -28,7 +28,7 @@ public class QueryUtils {
     }
 
 
-    public static List<New> fetchNewData(String requestUrl) {
+    public static List<newsItem> fetchNewData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
 
@@ -41,7 +41,7 @@ public class QueryUtils {
         }
 
 
-        List<New> news = extractFeatureFromJson(jsonResponse);
+        List<newsItem> news = extractFeatureFromJson(jsonResponse);
 
         return news;
     }
@@ -112,14 +112,14 @@ public class QueryUtils {
     }
 
 
-    private static List<New> extractFeatureFromJson(String newJSON) {
+    private static List<newsItem> extractFeatureFromJson(String newJSON) {
 
         if (TextUtils.isEmpty(newJSON)) {
             return null;
         }
 
 
-        List<New> news = new ArrayList<>();
+        List<newsItem> news = new ArrayList<>();
 
 
 
@@ -139,7 +139,7 @@ public class QueryUtils {
                 String Date = currentNew.getString("publishedAt");
                 String Content = currentNew.getString("content");
 
-                New nnew = new New(Title, Description, Date, Content, Browserurl);
+                newsItem nnew = new newsItem(Title, Description, Date, Content, Browserurl);
 
                 news.add(nnew);
             }

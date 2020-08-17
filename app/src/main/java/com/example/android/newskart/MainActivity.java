@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
     private NewAdapter newsAdapter;
-    private ArrayList<New> newsArrayList;
+    private ArrayList<newsItem> newsArrayList;
     RecyclerView newsRecyclerView;
 
     public  static TextView tvContentChange;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
          newsRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-          newsArrayList =new ArrayList<New>();
+          newsArrayList =new ArrayList<newsItem>();
            NewAsyncTask task = new NewAsyncTask();
           task.execute(USGS_REQUEST_URL);
 
@@ -211,27 +211,27 @@ public void tech(View view)
     }
 
 
-    private class NewAsyncTask extends AsyncTask<String, Void, List<New>> {
+    private class NewAsyncTask extends AsyncTask<String, Void, List<newsItem>> {
 
 
         @Override
-        protected List<New> doInBackground(String... urls) {
+        protected List<newsItem> doInBackground(String... urls) {
 
 
             if (urls.length < 1 || urls[0] == null) {
                 return null;
             }
 
-            List<New> result = QueryUtils.fetchNewData(urls[0]);
+            List<newsItem> result = QueryUtils.fetchNewData(urls[0]);
             return result;
         }
 
         @Override
-        protected void onPostExecute(List<New> data) {
+        protected void onPostExecute(List<newsItem> data) {
             newsArrayList.clear();
 
             if (data != null && !data.isEmpty()) {
-                newsArrayList = (ArrayList<New>) data;
+                newsArrayList = (ArrayList<newsItem>) data;
                 newsAdapter = new NewAdapter(MainActivity.this, newsArrayList);
                 newsRecyclerView.setAdapter(newsAdapter);
             }
