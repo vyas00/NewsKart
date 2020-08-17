@@ -35,7 +35,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_NEWS_TABLE);
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

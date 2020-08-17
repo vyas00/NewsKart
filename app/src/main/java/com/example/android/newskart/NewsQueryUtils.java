@@ -1,5 +1,7 @@
 package com.example.android.newskart;
 
+import android.content.Context;
+import android.graphics.drawable.Icon;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,13 +24,14 @@ public class NewsQueryUtils {
 
 
     private static final String TAG = "NewsQueryUtils";
-
-
-    private NewsQueryUtils() {
+   private static Context context;
+   static DatabaseHandler db;
+    public NewsQueryUtils(Context context) {
+        this.context=context;
     }
 
 
-    public static List<NewsItem> fetchNewData(String requestUrl) {
+    public List<NewsItem> fetchNewData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
 
@@ -119,8 +122,8 @@ public class NewsQueryUtils {
         }
 
 
-        List<NewsItem> news = new ArrayList<>();
-
+               List<NewsItem> news = new ArrayList<>();
+              db=new DatabaseHandler(context);
 
 
         try {
@@ -128,7 +131,7 @@ public class NewsQueryUtils {
             JSONObject baseJsonResponse = new JSONObject(newJSON);
 
             JSONArray newArray = baseJsonResponse.getJSONArray("articles");
-
+             if(db.getNewsCount()==20){db.deleteTableNews(); db=new DatabaseHandler(context);}
             for (int i = 0; i < newArray.length(); i++) {
 
                 JSONObject currentNew = newArray.getJSONObject(i);
@@ -140,8 +143,8 @@ public class NewsQueryUtils {
                 String Content = currentNew.getString("content");
 
                 NewsItem nnew = new NewsItem(Title, Description, Date, Content, Browserurl);
-
                 news.add(nnew);
+                db.addNews(nnew);
             }
         } catch (JSONException e) {
 

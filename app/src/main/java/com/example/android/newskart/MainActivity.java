@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public  static TextView tvContentChange;
      public static View btnBackButton;
      public  static View btnBrowserButton;
-
+     DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         tvContentChange = (TextView)findViewById(R.id.tv_content);
         btnBackButton =findViewById(R.id.btn_back);
         btnBrowserButton =findViewById(R.id.btn_browser);
+        db=new DatabaseHandler(getApplicationContext());
 
         final SearchView svSearchBox = (SearchView) findViewById(R.id.sv_searchbox);
 
@@ -221,8 +223,9 @@ public void tech(View view)
             if (urls.length < 1 || urls[0] == null) {
                 return null;
             }
-
-            List<NewsItem> result = NewsQueryUtils.fetchNewData(urls[0]);
+            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getApplicationContext());
+            List<NewsItem> result = newsQueryUtils.fetchNewData(urls[0]);
+            if(result==null) result=db.getAllNews();;
             return result;
         }
 
@@ -231,7 +234,8 @@ public void tech(View view)
             newsArrayList.clear();
 
             if (data != null && !data.isEmpty()) {
-                newsArrayList = (ArrayList<NewsItem>) data;
+                newsArrayList= (ArrayList<NewsItem>) data;
+                Log.d(TAG, "onPostExecute: "+ db.getNewsCount()+ " no of news items");
                 newsAdapter = new NewsItemAdapter(MainActivity.this, newsArrayList);
                 newsRecyclerView.setAdapter(newsAdapter);
             }
