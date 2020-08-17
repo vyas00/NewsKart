@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +18,9 @@ import java.util.Date;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHolder> {
-
-    private static final String LOCATION_SEPARATOR = "T";
-    private static final String SEPARATOR = "Z";
-    private static final String SEPARAT = "GMT+";
+/*    private static final String LOCATION_SEPARATOR = "T";
+    private static final String SEPARATOR = "Z";*/
+  /*  private static final String SEPARAT = "GMT+";*/
     private static final String TAG = "NewsItemAdapter";
 
     Context context;
@@ -67,39 +67,36 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
 
         holder.titleView.setText(currentNewsItem.getTitle());
 
-        String Ddate;
+        /*String Ddate;
         String Ttime;
         String originalTime;
         String datetime;
 
         String displayt;
         String displayd;
-
+*/
         String mixdatetime = currentNewsItem.getDate();
         Log.d(TAG, "onBindViewHolder: "+ mixdatetime);
 
-        String[] parts = mixdatetime.split(LOCATION_SEPARATOR);
+/*        String[] parts = mixdatetime.split(LOCATION_SEPARATOR);
         Ddate = parts[0];
-        Ttime = parts[1];
+        Ttime = parts[1];*/
 
-
+/*
         String[] part = Ttime.split(SEPARATOR);
-        originalTime=part[0];
+        originalTime=part[0];*/
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateInString = Ddate+" "+originalTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+/*        String dateInString = Ddate+" "+originalTime;*/
         Date date = null;
         try {
-            date = sdf.parse(dateInString);
+            date = sdf.parse(mixdatetime);
+           String datetime=date.toString();
 
-            Date d=new Date();
-            datetime=date.toString();
+/*            String[] pat= datetime.split(SEPARAT);
+           displayd=pat[0];*/
 
-            String[] pat= datetime.split(SEPARAT);
-            displayd=pat[0];
-            displayt=pat[1];
-
-            holder.dateView.setText(displayd);
+            holder.dateView.setText(datetime);
 
         } catch (ParseException e) {
             e.printStackTrace();
