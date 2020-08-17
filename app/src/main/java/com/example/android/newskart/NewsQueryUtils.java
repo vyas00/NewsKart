@@ -29,7 +29,7 @@ public class NewsQueryUtils {
     public NewsQueryUtils(Context context) {
         this.context=context;
     }
-
+public NewsQueryUtils(){}
 
     public List<NewsItem> fetchNewData(String requestUrl) {
 
@@ -131,7 +131,8 @@ public class NewsQueryUtils {
             JSONObject baseJsonResponse = new JSONObject(newJSON);
 
             JSONArray newArray = baseJsonResponse.getJSONArray("articles");
-             if(db.getNewsCount()==20){db.deleteTableNews(); db=new DatabaseHandler(context);}
+             if(db.getNewsCount()==20){db.deleteTableNews(); db=new DatabaseHandler(context);
+                 Log.d(TAG, "extractFeatureFromJson: "+ "delete table successful");}
             for (int i = 0; i < newArray.length(); i++) {
 
                 JSONObject currentNew = newArray.getJSONObject(i);
