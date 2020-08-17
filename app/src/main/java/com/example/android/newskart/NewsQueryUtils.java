@@ -18,17 +18,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryUtils {
+public class NewsQueryUtils {
 
 
-    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+    private static final String TAG = "NewsQueryUtils";
 
 
-    private QueryUtils() {
+    private NewsQueryUtils() {
     }
 
 
-    public static List<newsItem> fetchNewData(String requestUrl) {
+    public static List<NewsItem> fetchNewData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
 
@@ -37,11 +37,11 @@ public class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+            Log.e(TAG, "Problem making the HTTP request.", e);
         }
 
 
-        List<newsItem> news = extractFeatureFromJson(jsonResponse);
+        List<NewsItem> news = extractFeatureFromJson(jsonResponse);
 
         return news;
     }
@@ -52,7 +52,7 @@ public class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Problem building the URL ", e);
+            Log.e(TAG, "Problem building the URL ", e);
         }
         return url;
     }
@@ -80,10 +80,10 @@ public class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                Log.e(TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(TAG, "Problem retrieving the earthquake JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -112,14 +112,14 @@ public class QueryUtils {
     }
 
 
-    private static List<newsItem> extractFeatureFromJson(String newJSON) {
+    private static List<NewsItem> extractFeatureFromJson(String newJSON) {
 
         if (TextUtils.isEmpty(newJSON)) {
             return null;
         }
 
 
-        List<newsItem> news = new ArrayList<>();
+        List<NewsItem> news = new ArrayList<>();
 
 
 
@@ -139,7 +139,7 @@ public class QueryUtils {
                 String Date = currentNew.getString("publishedAt");
                 String Content = currentNew.getString("content");
 
-                newsItem nnew = new newsItem(Title, Description, Date, Content, Browserurl);
+                NewsItem nnew = new NewsItem(Title, Description, Date, Content, Browserurl);
 
                 news.add(nnew);
             }

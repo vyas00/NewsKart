@@ -2,7 +2,8 @@ package com.example.android.newskart;
 
 import android.media.Rating;
 
-public class newsItem {
+public class NewsItem {
+    private static final String TAG = "NewsItem";
 
     private String title;
 
@@ -14,9 +15,9 @@ public class newsItem {
 
     private String browserUrl;
 
-     public newsItem(){}
+     public NewsItem(){}
 
-    public newsItem(String title, String discription, String date, String content, String browserUrl)
+    public NewsItem(String title, String discription, String date, String content, String browserUrl)
     {
         this.title=title;
         this.discription=discription;

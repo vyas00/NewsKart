@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String USGS_REQUEST_URL =
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
-    private NewAdapter newsAdapter;
-    private ArrayList<newsItem> newsArrayList;
+    private NewsItemAdapter newsAdapter;
+    private ArrayList<NewsItem> newsArrayList;
     RecyclerView newsRecyclerView;
 
     public  static TextView tvContentChange;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
          newsRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-          newsArrayList =new ArrayList<newsItem>();
+          newsArrayList =new ArrayList<NewsItem>();
            NewAsyncTask task = new NewAsyncTask();
           task.execute(USGS_REQUEST_URL);
 
@@ -211,28 +211,28 @@ public void tech(View view)
     }
 
 
-    private class NewAsyncTask extends AsyncTask<String, Void, List<newsItem>> {
+    private class NewAsyncTask extends AsyncTask<String, Void, List<NewsItem>> {
 
 
         @Override
-        protected List<newsItem> doInBackground(String... urls) {
+        protected List<NewsItem> doInBackground(String... urls) {
 
 
             if (urls.length < 1 || urls[0] == null) {
                 return null;
             }
 
-            List<newsItem> result = QueryUtils.fetchNewData(urls[0]);
+            List<NewsItem> result = NewsQueryUtils.fetchNewData(urls[0]);
             return result;
         }
 
         @Override
-        protected void onPostExecute(List<newsItem> data) {
+        protected void onPostExecute(List<NewsItem> data) {
             newsArrayList.clear();
 
             if (data != null && !data.isEmpty()) {
-                newsArrayList = (ArrayList<newsItem>) data;
-                newsAdapter = new NewAdapter(MainActivity.this, newsArrayList);
+                newsArrayList = (ArrayList<NewsItem>) data;
+                newsAdapter = new NewsItemAdapter(MainActivity.this, newsArrayList);
                 newsRecyclerView.setAdapter(newsAdapter);
             }
         }

@@ -16,17 +16,17 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
+public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHolder> {
 
     private static final String LOCATION_SEPARATOR = "T";
     private static final String SEPARATOR = "Z";
     private static final String SEPARAT = "GMT+";
-    private static final String TAG = "NewAdapter";
+    private static final String TAG = "NewsItemAdapter";
 
     Context context;
-    private  ArrayList<newsItem> news;
+    private  ArrayList<NewsItem> news;
 
-    public NewAdapter(Context context, ArrayList<newsItem> news) {
+    public NewsItemAdapter(Context context, ArrayList<NewsItem> news) {
         this.context=context;
         this.news=news;
     }
@@ -46,14 +46,14 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
             MainActivity mainActivity=new MainActivity();
             mainActivity.setvisibilityChanges();
             int position=getAdapterPosition();
-            newsItem currentNewsItem = news.get(position);
+            NewsItem currentNewsItem = news.get(position);
             MainActivity.setContentAfterVisibility(currentNewsItem.getContent());
             mainActivity.returnUrl(currentNewsItem.getBrowserUrl());
         }
     }
     @NonNull
     @Override
-    public NewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewsItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater
                         .from(context)
@@ -62,8 +62,8 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final NewAdapter.ViewHolder holder, int position) {
-        final newsItem currentNewsItem = news.get(position);
+    public void onBindViewHolder(@NonNull final NewsItemAdapter.ViewHolder holder, int position) {
+        final NewsItem currentNewsItem = news.get(position);
 
         holder.titleView.setText(currentNewsItem.getTitle());
 
