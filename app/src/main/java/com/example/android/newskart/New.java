@@ -6,7 +6,6 @@ public class New {
 
     private String nTile;
 
-
     private String nDiscription;
 
     private String nDate;
@@ -15,7 +14,7 @@ public class New {
 
     private String nBrowserUrl;
 
-
+     public New(){}
 
     public New (String Tilte, String Discription, String Date, String Content, String BrowserUrl)
     {
@@ -31,7 +30,6 @@ public class New {
     {
         return nTile;
     }
-
 
     public String getDiscription()
     {
@@ -52,8 +50,5 @@ public class New {
     {
         return nBrowserUrl;
     }
-
-
-
 
 }

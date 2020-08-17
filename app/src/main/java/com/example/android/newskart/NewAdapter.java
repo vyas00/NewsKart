@@ -1,25 +1,15 @@
 package com.example.android.newskart;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,34 +21,34 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
     private static final String LOCATION_SEPARATOR = "T";
     private static final String SEPARATOR = "Z";
     private static final String SEPARAT = "GMT+";
+    private static final String TAG = "NewAdapter";
 
     Context context;
     private  ArrayList<New> news;
 
-    public NewAdapter(Activity context, ArrayList<New> news) {
+    public NewAdapter(Context context, ArrayList<New> news) {
         this.context=context;
         this.news=news;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
         TextView titleView;
         TextView dateView;
-
         public ViewHolder(@NonNull View view) {
             super(view);
-            this.titleView=(TextView)view.findViewById(R.id.title_text_view);
-            this.dateView = (TextView)view.findViewById(R.id.date_text_view);
+            titleView=(TextView)view.findViewById(R.id.title_text_view);
+            dateView = (TextView)view.findViewById(R.id.date_text_view);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            MainActivity.setvisibilityChanges();
+            MainActivity mainActivity=new MainActivity();
+            mainActivity.setvisibilityChanges();
             int position=getAdapterPosition();
             New currentNew = news.get(position);
             MainActivity.setContentAfterVisibility(currentNew.getContent());
-            MainActivity.ReturnUrl(currentNew.getBrowserUrl());
+            mainActivity.returnUrl(currentNew.getBrowserUrl());
         }
     }
     @NonNull
@@ -67,7 +57,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
         return new ViewHolder(
                 LayoutInflater
                         .from(context)
-                        .inflate(R.layout.new_list_item, parent, false)
+                        .inflate(R.layout.news_list, parent, false)
         );
     }
 
@@ -77,17 +67,16 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.ViewHolder> {
 
         holder.titleView.setText(currentNew.getTitle());
 
-
         String Ddate;
         String Ttime;
         String originalTime;
-
         String datetime;
 
         String displayt;
         String displayd;
 
         String mixdatetime = currentNew.getDate();
+        Log.d(TAG, "onBindViewHolder: "+ mixdatetime);
 
         String[] parts = mixdatetime.split(LOCATION_SEPARATOR);
         Ddate = parts[0];

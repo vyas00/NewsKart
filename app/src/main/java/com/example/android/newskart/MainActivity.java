@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-   public  static   String browserUrl;
+   public  String browserUrl;
 
     private static final String TAG = "MainActivity";
 
@@ -27,27 +27,27 @@ public class MainActivity extends AppCompatActivity {
     private static final String USGS_REQUEST_URL =
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
-    private NewAdapter mAdapter;
-    private ArrayList<New> newList;
-    RecyclerView newRecyclerView;
+    private NewAdapter newsAdapter;
+    private ArrayList<New> newsArrayList;
+    RecyclerView newsRecyclerView;
 
-    public  static TextView contentchange;
-     public static View backbutton;
-     public  static View browserbutton;
+    public  static TextView tvContentChange;
+     public static View btnBackButton;
+     public  static View btnBrowserButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        contentchange= (TextView)findViewById(R.id.content_text_view);
-        backbutton=findViewById(R.id.back_button);
-        browserbutton=findViewById(R.id.browser_button);
+        tvContentChange = (TextView)findViewById(R.id.tv_content);
+        btnBackButton =findViewById(R.id.btn_back);
+        btnBrowserButton =findViewById(R.id.btn_browser);
 
-        final SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
+        final SearchView svSearchBox = (SearchView) findViewById(R.id.sv_searchbox);
 
 
-        simpleSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        svSearchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String inputUrl= "https://newsapi.org/v2/everything?q="+query+"&apiKey=061596553c8c44aa85d0c724d3246163";
@@ -63,15 +63,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-         newRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
-        newRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+         newsRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
+        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-          newList=new ArrayList<New>();
+          newsArrayList =new ArrayList<New>();
            NewAsyncTask task = new NewAsyncTask();
           task.execute(USGS_REQUEST_URL);
 
 
-        Button browser=(Button)findViewById(R.id.browser_button) ;
+        Button browser=(Button)findViewById(R.id.btn_browser) ;
         browser.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -111,15 +111,15 @@ public void clearText(View view)
 BackbuttonCalling();
 
 }
-public static void setvisibilityChanges()
+public void setvisibilityChanges()
 {
-    contentchange.setVisibility(View.VISIBLE);
-    backbutton.setVisibility(View.VISIBLE);
-    browserbutton.setVisibility(View.VISIBLE);
+    tvContentChange.setVisibility(View.VISIBLE);
+    btnBackButton.setVisibility(View.VISIBLE);
+    btnBrowserButton.setVisibility(View.VISIBLE);
 }
 public static void setContentAfterVisibility(String input)
 {
-    contentchange.setText(input);
+    tvContentChange.setText(input);
 }
 public void tech(View view)
 {
@@ -228,12 +228,12 @@ public void tech(View view)
 
         @Override
         protected void onPostExecute(List<New> data) {
-            newList.clear();
+            newsArrayList.clear();
 
             if (data != null && !data.isEmpty()) {
-                newList= (ArrayList<New>) data;
-                mAdapter = new NewAdapter(MainActivity.this, newList);
-                newRecyclerView.setAdapter(mAdapter);
+                newsArrayList = (ArrayList<New>) data;
+                newsAdapter = new NewAdapter(MainActivity.this, newsArrayList);
+                newsRecyclerView.setAdapter(newsAdapter);
             }
         }
 
@@ -243,17 +243,17 @@ public void tech(View view)
 
     private void BackbuttonCalling(){
 
-TextView content= (TextView)findViewById(R.id.content_text_view);
+TextView content= (TextView)findViewById(R.id.tv_content);
 content.setText(null);
 content.setVisibility(View.GONE);
-        View backbutton=findViewById(R.id.back_button);
+        View backbutton=findViewById(R.id.btn_back);
         backbutton.setVisibility(View.GONE);
-        View onchrome=findViewById(R.id.browser_button);
+        View onchrome=findViewById(R.id.btn_browser);
         onchrome.setVisibility(View.GONE);
 
     }
 
-public static void ReturnUrl(String url)
+public  void returnUrl(String url)
 {
  browserUrl=url;
 }

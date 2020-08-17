@@ -11,7 +11,7 @@
 
 
     <SearchView
-        android:id="@+id/simpleSearchView"
+        android:id="@+id/sv_searchbox"
         android:layout_width="340dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         />
 
     <TextView
-        android:id="@+id/content_text_view"
+        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -38,7 +38,7 @@
         >
 
         <Button
-            android:id="@+id/back_button"
+            android:id="@+id/btn_back"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginLeft="220dp"
@@ -50,7 +50,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/browser_button"
+            android:id="@+id/btn_browser"
             android:layout_width="72dp"
             android:layout_height="40dp"
             android:layout_marginLeft="-150dp"
