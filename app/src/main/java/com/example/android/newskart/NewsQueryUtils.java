@@ -2,8 +2,12 @@ package com.example.android.newskart;
 
 import android.content.Context;
 import android.graphics.drawable.Icon;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +21,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewsQueryUtils {
@@ -31,6 +37,7 @@ public class NewsQueryUtils {
     }
 public NewsQueryUtils(){}
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<NewsItem> fetchNewData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
@@ -115,6 +122,7 @@ public NewsQueryUtils(){}
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private static List<NewsItem> extractFeatureFromJson(String newJSON) {
 
         if (TextUtils.isEmpty(newJSON)) {
@@ -143,7 +151,8 @@ public NewsQueryUtils(){}
                 String Date = currentNew.getString("publishedAt");
                 String Content = currentNew.getString("content");
 
-                NewsItem nnew = new NewsItem(Title, Description, Date, Content, Browserurl);
+                NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl);
+                Log.d(TAG, "extractFeatureFromJson: "+ getLongEpochTime(Date));
                 news.add(nnew);
                 db.addNews(nnew);
             }
@@ -153,8 +162,23 @@ public NewsQueryUtils(){}
         }
 
         return news;
-
-
     }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private static  long getLongEpochTime(String timestring)
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date date =null;
+        try {
+            date = df.parse(timestring);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long epoch = date.getTime();
+        return epoch;
+    }
+
 }
 

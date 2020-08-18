@@ -1,7 +1,5 @@
 package com.example.android.newskart;
 
-import android.media.Rating;
-
 public class NewsItem {
     private static final String TAG = "NewsItem";
 
@@ -9,19 +7,20 @@ public class NewsItem {
 
     private String discription;
 
-    private String date;
+    private long epochTime;
 
     private String content;
 
     private String browserUrl;
 
+
      public NewsItem(){}
 
-    public NewsItem(String title, String discription, String date, String content, String browserUrl)
+    public NewsItem(String title, String discription, long epochTime, String content, String browserUrl)
     {
         this.title=title;
         this.discription=discription;
-        this.date=date;
+        this.epochTime = epochTime;
         this.content=content;
         this.browserUrl=browserUrl;
 
@@ -35,8 +34,8 @@ public class NewsItem {
          this.discription=discription;
     }
 
-    public void setDate(String date){
-         this.date=date;
+    public void setEpochTime(long epochTime){
+         this.epochTime = epochTime;
     }
 
     public void setContent(String content){
@@ -45,6 +44,8 @@ public class NewsItem {
     public void setBrowserUrl(String browserUrl){
          this.browserUrl=browserUrl;
     }
+
+
     public String getTitle()
     {
         return title;
@@ -55,9 +56,9 @@ public class NewsItem {
         return discription;
     }
 
-    public String getDate()
+    public long getEpochTime()
     {
-        return date;
+        return epochTime;
     }
 
     public String getContent()

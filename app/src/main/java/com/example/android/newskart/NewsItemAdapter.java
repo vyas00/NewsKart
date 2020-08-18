@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         final NewsItem currentNewsItem = news.get(position);
 
         holder.titleView.setText(currentNewsItem.getTitle());
-
+       holder.dateView.setText(getTimeStamp(currentNewsItem.getEpochTime()));
         /*String Ddate;
         String Ttime;
         String originalTime;
@@ -75,8 +74,8 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         String displayt;
         String displayd;
 */
-        String mixdatetime = currentNewsItem.getDate();
-        Log.d(TAG, "onBindViewHolder: "+ mixdatetime);
+/*        String mixdatetime = currentNewsItem.getEpochTime();
+        Log.d(TAG, "onBindViewHolder: "+ mixdatetime);*/
 
 /*        String[] parts = mixdatetime.split(LOCATION_SEPARATOR);
         Ddate = parts[0];
@@ -86,21 +85,21 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         String[] part = Ttime.split(SEPARATOR);
         originalTime=part[0];*/
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-/*        String dateInString = Ddate+" "+originalTime;*/
+/*        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+*//*        String dateInString = Ddate+" "+originalTime;*//*
         Date date = null;
         try {
             date = sdf.parse(mixdatetime);
            String datetime=date.toString();
 
-/*            String[] pat= datetime.split(SEPARAT);
-           displayd=pat[0];*/
+*//*            String[] pat= datetime.split(SEPARAT);
+           displayd=pat[0];*//*
 
             holder.dateView.setText(datetime);
 
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }
@@ -110,6 +109,11 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         return this.news.size();
     }
 
-
+    public String getTimeStamp(long timeinMillies) {
+        String date = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        date = formatter.format(new Date(timeinMillies));
+        return date;
+    }
 }
 

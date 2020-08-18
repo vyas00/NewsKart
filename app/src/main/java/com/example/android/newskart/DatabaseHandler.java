@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_NEWS_TABLE = "CREATE TABLE " + TABLE_NEWS + " (" + NEWS_TITLE + " TEXT," + NEWS_DISCRIPTION + " TEXT," +
-                NEWS_DATE + " TEXT," + NEWS_CONTENT + " TEXT,"+ NEWS_URL +" TEXT" + ")";
+                NEWS_DATE + " INTEGER," + NEWS_CONTENT + " TEXT,"+ NEWS_URL +" TEXT" + ")";
         db.execSQL(CREATE_NEWS_TABLE);
     }
 
@@ -54,7 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(NEWS_TITLE, newsItem.getTitle());
         values.put(NEWS_DISCRIPTION, newsItem.getDiscription());
-        values.put(NEWS_DATE, newsItem.getDate());
+        values.put(NEWS_DATE, newsItem.getEpochTime());
         values.put(NEWS_CONTENT, newsItem.getContent());
         values.put(NEWS_URL, newsItem.getBrowserUrl());
 
@@ -78,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 NewsItem newsItem = new NewsItem();
                 newsItem.setTitle(cursor.getString(0));
                 newsItem.setDiscription(cursor.getString(1));
-                newsItem.setDate(cursor.getString(2));
+                newsItem.setEpochTime(Long.parseLong(cursor.getString(2)));
                 newsItem.setContent(cursor.getString(3));
                 newsItem.setBrowserUrl(cursor.getString(4));
 
