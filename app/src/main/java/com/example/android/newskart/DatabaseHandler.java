@@ -20,8 +20,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String NEWS_TITLE = "title";
     private static final String NEWS_DISCRIPTION = "description";
     private static final String NEWS_DATE = "date";
-    private static final String NEWS_URL = "url";
+    private static final String NEWS_BROWSER_URL = "url";
     private static final String NEWS_CONTENT = "content";
+    private static final String NEWS_IMAGE_URL = "imageurl";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_NEWS_TABLE = "CREATE TABLE " + TABLE_NEWS + " (" + NEWS_TITLE + " TEXT," + NEWS_DISCRIPTION + " TEXT," +
-                NEWS_DATE + " INTEGER," + NEWS_CONTENT + " TEXT,"+ NEWS_URL +" TEXT" + ")";
+                NEWS_DATE + " INTEGER," + NEWS_CONTENT + " TEXT,"+ NEWS_BROWSER_URL + " TEXT," + NEWS_IMAGE_URL + " TEXT" + ")";
         db.execSQL(CREATE_NEWS_TABLE);
     }
 
@@ -56,7 +57,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(NEWS_DISCRIPTION, newsItem.getDiscription());
         values.put(NEWS_DATE, newsItem.getEpochTime());
         values.put(NEWS_CONTENT, newsItem.getContent());
-        values.put(NEWS_URL, newsItem.getBrowserUrl());
+        values.put(NEWS_BROWSER_URL, newsItem.getBrowserUrl());
+        values.put(NEWS_IMAGE_URL,newsItem.getImageUrl());
 
         db.insert(TABLE_NEWS, null, values);
         Log.d(TAG, "News added: database: count::" + getNewsCount());
@@ -81,6 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 newsItem.setEpochTime(Long.parseLong(cursor.getString(2)));
                 newsItem.setContent(cursor.getString(3));
                 newsItem.setBrowserUrl(cursor.getString(4));
+                newsItem.setImageUrl(cursor.getString(5));
                 newsList.add(newsItem);
             } while (cursor.moveToNext());
         }
@@ -128,7 +131,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
-
+    public void deleteTableNews() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NEWS);
+    }
 
 
 }

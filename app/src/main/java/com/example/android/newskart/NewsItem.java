@@ -12,17 +12,19 @@ public class NewsItem {
     private String content;
 
     private String browserUrl;
+    private String imageUrl;
 
 
      public NewsItem(){}
 
-    public NewsItem(String title, String discription, long epochTime, String content, String browserUrl)
+    public NewsItem(String title, String discription, long epochTime, String content, String browserUrl,String imageUrl)
     {
         this.title=title;
         this.discription=discription;
         this.epochTime = epochTime;
         this.content=content;
         this.browserUrl=browserUrl;
+        this.imageUrl=imageUrl;
 
     }
 
@@ -44,7 +46,9 @@ public class NewsItem {
     public void setBrowserUrl(String browserUrl){
          this.browserUrl=browserUrl;
     }
-
+    public void setImageUrl(String imageUrl){
+        this.imageUrl=imageUrl;
+    }
 
     public String getTitle()
     {
@@ -69,6 +73,11 @@ public class NewsItem {
     public String getBrowserUrl()
     {
         return browserUrl;
+    }
+
+    public String getImageUrl()
+    {
+        return imageUrl;
     }
 
 }

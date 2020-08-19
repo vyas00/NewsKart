@@ -150,8 +150,9 @@ public NewsQueryUtils(){}
                 String Browserurl = currentNew.getString("url");
                 String Date = currentNew.getString("publishedAt");
                 String Content = currentNew.getString("content");
+                String ImageUrl=currentNew.getString("urlToImage");
 
-                NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl);
+                NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl,ImageUrl);
                 news.add(nnew);
 
                 if(db.getNewsCount()==0){db.addNews(nnew);}

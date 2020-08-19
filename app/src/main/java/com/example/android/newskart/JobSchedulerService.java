@@ -1,11 +1,17 @@
 package com.example.android.newskart;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobSchedulerService extends JobService {
@@ -18,12 +24,14 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
+        addNotification();
         doBackgroundWork(params);
         return true;
     }
 
     private void doBackgroundWork(final JobParameters params) {
         new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                     if (jobCancelled) {
@@ -45,5 +53,31 @@ public class JobSchedulerService extends JobService {
         //because we need to stop the background work ourselves.
         jobCancelled = true;
         return true;
+    }
+
+    private void addNotification() {
+        Intent intent = new Intent(JobSchedulerService.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(JobSchedulerService.this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel= new NotificationChannel("channel_id_1", "notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager= getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this,"channel_id_1")
+                        .setSmallIcon(R.mipmap.logo)
+                        .setContentTitle("New updates to read")
+                        .setContentText("Tap to visit new updates")
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.notify(0, builder.build());
+
+        Log.d(TAG, " notification function");
     }
 }
