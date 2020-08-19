@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Bomb Blast in Mumbai, 11 died"
             android:textColor="#000000"
-            android:textSize="14.5sp"
+            android:textSize="14sp"
             android:textStyle="normal" />
 
 
