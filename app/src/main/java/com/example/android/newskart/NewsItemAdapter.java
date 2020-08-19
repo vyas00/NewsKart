@@ -25,15 +25,25 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
     private static final String TAG = "NewsItemAdapter";
 
 
+    private final String GLOBAL_URL= "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String SPORTS_URL="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String BUSINESS_URL="https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String HEALTH_URL="https://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String ENTERTAINMENT_URL="https://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String GAMING_URL="https://newsapi.org/v2/everything?q=gaming&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String TECH_URL="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=061596553c8c44aa85d0c724d3246163";
+
 
     Context context;
     private  ArrayList<NewsItem> news;
     Activity activity;
+    private String url;
 
-    public NewsItemAdapter(Context context,Activity activity, ArrayList<NewsItem> news) {
+    public NewsItemAdapter(Context context,Activity activity, ArrayList<NewsItem> news, String url) {
         this.context=context;
         this.news=news;
         this.activity=activity;
+        this.url=url;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
@@ -95,45 +105,16 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
     public void onBindViewHolder(@NonNull final NewsItemAdapter.ViewHolder holder, int position) {
         final NewsItem currentNewsItem = news.get(position);
 
-
         holder.tvTitle.setText(currentNewsItem.getTitle());
         holder.tvDate.setText(getTimeStamp(currentNewsItem.getEpochTime()));
-        /*String Ddate;
-        String Ttime;
-        String originalTime;
-        String datetime;
 
-        String displayt;
-        String displayd;
-*/
-/*        String mixdatetime = currentNewsItem.getEpochTime();
-        Log.d(TAG, "onBindViewHolder: "+ mixdatetime);*/
-
-/*        String[] parts = mixdatetime.split(LOCATION_SEPARATOR);
-        Ddate = parts[0];
-        Ttime = parts[1];*/
-
-/*
-        String[] part = Ttime.split(SEPARATOR);
-        originalTime=part[0];*/
-
-/*        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-*//*        String dateInString = Ddate+" "+originalTime;*//*
-        Date date = null;
-        try {
-            date = sdf.parse(mixdatetime);
-           String datetime=date.toString();
-
-*//*            String[] pat= datetime.split(SEPARAT);
-           displayd=pat[0];*//*
-
-            holder.dateView.setText(datetime);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
-
-
+        if(url.equals(GLOBAL_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_news_global);
+        else if(url.equals(SPORTS_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_sports);
+        else if(url.equals(BUSINESS_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_business);
+        else if(url.equals(HEALTH_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_health);
+        else if(url.equals(ENTERTAINMENT_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_entertainment);
+        else if(url.equals(GAMING_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_game);
+        else if(url.equals(TECH_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_tech);
     }
 
     @Override

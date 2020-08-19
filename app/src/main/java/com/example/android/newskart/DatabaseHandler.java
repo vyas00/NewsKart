@@ -48,8 +48,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     void addNews(NewsItem newsItem) {
 
-
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -111,17 +109,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return count;
     }
 
-    public void deleteThisNewsItem( long time) {
+    public void deleteThisNewsItem( String url) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NEWS, NEWS_DATE + " = ?", new String[]{Long.toString(time)});
+        db.delete(TABLE_NEWS, NEWS_BROWSER_URL + " = ?", new String[]{url});
         db.close();
         Log.d(TAG, "deleteThisNewsItem: count:: " + getNewsCount());
     }
 
 
-    public  boolean isNewsItemPresent(long time) {
+    public  boolean isNewsItemPresent(String url) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT  * FROM " + TABLE_NEWS+  " todo WHERE " + NEWS_DATE + " = "  + time;
+        String query = "SELECT  * FROM " + TABLE_NEWS+  " todo WHERE " + NEWS_BROWSER_URL + " ='"  + url+"'";
 
         Cursor  cursor = db.rawQuery(query,null);
         if(cursor.getCount() <= 0){

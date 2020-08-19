@@ -81,7 +81,7 @@ public class NewsFragment extends Fragment {
             if (data != null && !data.isEmpty()) {
                 newsArrayList= (ArrayList<NewsItem>) data;
                 Log.d(TAG, "onPostExecute: "+ db.getNewsCount()+ " no of news items");
-                newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList);
+                newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList,requestUrl);
                 newsRecyclerView.setAdapter(newsAdapter);
             }
         }

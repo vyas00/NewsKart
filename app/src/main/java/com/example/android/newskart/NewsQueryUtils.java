@@ -138,9 +138,9 @@ public NewsQueryUtils(){}
             JSONObject baseJsonResponse = new JSONObject(newJSON);
 
             JSONArray newArray = baseJsonResponse.getJSONArray("articles");
-/*             if(db.getNewsCount()==20)
+             if(db.getNewsCount()==20)
              {db.emptyTableNews();
-                 Log.d(TAG, "extractFeatureFromJson: "+ "empty table successful");}*/
+                 Log.d(TAG, "extractFeatureFromJson: "+ "empty table successful");}
             for (int i = 0; i < newArray.length(); i++) {
 
                 JSONObject currentNew = newArray.getJSONObject(i);
@@ -155,15 +155,15 @@ public NewsQueryUtils(){}
                 NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl,ImageUrl);
                 news.add(nnew);
 
-/*                if(db.getNewsCount()==0){db.addNews(nnew);}
-                else if(db.isNewsItemPresent(getLongEpochTime(Date))==false)
+                if(db.getNewsCount()==0){db.addNews(nnew);}
+                else if(db.isNewsItemPresent(Browserurl)==false)
                 {
                     db.addNews(nnew);
                     if(db.getNewsCount()>18) {
                         ArrayList<NewsItem> sortedNewsItem=db.getAllNews();
-                        db.deleteThisNewsItem(sortedNewsItem.get(sortedNewsItem.size() - 1).getEpochTime());
+                        db.deleteThisNewsItem(sortedNewsItem.get(sortedNewsItem.size() - 1).getBrowserUrl());
                     }
-                }*/
+                }
 
             }
         } catch (JSONException e) {

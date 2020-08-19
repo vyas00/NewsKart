@@ -7,6 +7,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    DatabaseHandler db;
 
     public String usgsRequestUrl =
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl)).commit();
+/*        db=new DatabaseHandler(getApplicationContext());
+        db.emptyTableNews();*/
 
 
 

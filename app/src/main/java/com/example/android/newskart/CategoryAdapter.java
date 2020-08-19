@@ -75,7 +75,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final String currentCategory = categoryList.get(position);
          holder.tvCategoryName.setText(currentCategory);
 
-
         holder.linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +100,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         if(position==sl_category_position) holder.tvCategoryName.setTextColor(Color.parseColor("#00aaff"));
         else holder.tvCategoryName.setTextColor(Color.parseColor("#6E6868"));
+
         if(currentCategory.equals(GLOBAL))holder.ivCategoryImage.setImageResource(R.drawable.ic_global);
         else if(currentCategory.equals(SPORTS))holder.ivCategoryImage.setImageResource(R.drawable.ic_sports);
         else if(currentCategory.equals(BUSINESS))holder.ivCategoryImage.setImageResource(R.drawable.ic_business);
