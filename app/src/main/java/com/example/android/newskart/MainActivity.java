@@ -1,8 +1,13 @@
 package com.example.android.newskart;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.job.JobScheduler;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,12 +18,23 @@ public class MainActivity extends AppCompatActivity {
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl)).commit();
+
+        JobSharedPreference.setContext(getApplicationContext());
+
+        Log.d(TAG, "onCreate: previous long time "+ JobSharedPreference.getLongTime());
+/*        if(System.currentTimeMillis()-JobSharedPreference.getLongTime()< 3*60*60*1000) {
+            JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+          if(JobUtility.isJobServiceOn(getApplicationContext())) scheduler.cancel(100);
+            JobUtility.scheduleNewsJob(getApplicationContext());
+        }*/
+
 /*        db=new DatabaseHandler(getApplicationContext());
         db.emptyTableNews();*/
 

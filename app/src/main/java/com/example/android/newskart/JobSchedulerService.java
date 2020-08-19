@@ -24,8 +24,8 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
-        addNotification();
         doBackgroundWork(params);
+        JobUtility.scheduleNewsJob(getApplicationContext());
         return true;
     }
 

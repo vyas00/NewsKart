@@ -17,14 +17,14 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        Log.d(TAG,action + " received");
-        if(action != null) {
-            if (action.equals(Intent.ACTION_BOOT_COMPLETED) ) {
-                Log.d(TAG, "onReceive: entered");
-                 JobUtility.scheduleNewsJob(context);
-            }
+                 String action = intent.getAction();
+                 Log.d(TAG,action + " received");
+               JobSharedPreference.setContext(context);
+               if(System.currentTimeMillis()- JobSharedPreference.getLongTime()<30*60*100)
+               {
+
+               }
+
 
         }
     }
-}

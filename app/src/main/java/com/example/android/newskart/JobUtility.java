@@ -21,8 +21,7 @@ public class JobUtility {
         ComponentName componentJobName = new ComponentName(context, JobSchedulerService.class);
         JobInfo info = new JobInfo.Builder(100, componentJobName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(true)
-                .setPeriodic(3 * 60 * 60 * 1000)
+                .setOverrideDeadline(3*60*60*1000)
                 .build();
         JobScheduler scheduler = (JobScheduler) context.getSystemService(context.JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
@@ -31,6 +30,22 @@ public class JobUtility {
         } else {
             Log.d(TAG, "Job scheduling failed");
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static boolean isJobServiceOn(Context context ) {
+        JobScheduler scheduler = (JobScheduler) context.getSystemService( Context.JOB_SCHEDULER_SERVICE ) ;
+
+        boolean hasBeenScheduled = false ;
+
+        for ( JobInfo jobInfo : scheduler.getAllPendingJobs() ) {
+            if ( jobInfo.getId() == 100 ) {
+                hasBeenScheduled = true ;
+                break ;
+            }
+        }
+
+        return hasBeenScheduled ;
     }
 
 }
