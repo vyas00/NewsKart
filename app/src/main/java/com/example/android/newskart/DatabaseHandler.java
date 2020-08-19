@@ -47,7 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     void addNews(NewsItem newsItem) {
 
-        Log.d(TAG, "News is : " + newsItem.getTitle());
+
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -59,7 +59,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(NEWS_URL, newsItem.getBrowserUrl());
 
         db.insert(TABLE_NEWS, null, values);
-
+        Log.d(TAG, "News added: database: count::" + getNewsCount());
         db.close();
     }
 
@@ -70,7 +70,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_NEWS;
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(selectQuery + " ORDER BY "+ NEWS_DATE + " DESC", new String[] {});
 
 
         if (cursor.moveToFirst() && cursor!=null) {
@@ -81,8 +81,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 newsItem.setEpochTime(Long.parseLong(cursor.getString(2)));
                 newsItem.setContent(cursor.getString(3));
                 newsItem.setBrowserUrl(cursor.getString(4));
-
-
                 newsList.add(newsItem);
             } while (cursor.moveToNext());
         }
@@ -91,9 +89,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public void deleteTableNews() {
+    public void emptyTableNews() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NEWS);
+        db.delete(TABLE_NEWS,null,null);
     }
 
 
@@ -109,5 +107,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return count;
     }
+
+    public void deleteThisNewsItem( long time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NEWS, NEWS_DATE + " = ?", new String[]{Long.toString(time)});
+        db.close();
+        Log.d(TAG, "deleteThisNewsItem: count:: " + getNewsCount());
+    }
+
+
+    public  boolean isNewsItemPresent(long time) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT  * FROM " + TABLE_NEWS+  " todo WHERE " + NEWS_DATE + " = "  + time;
+
+        Cursor  cursor = db.rawQuery(query,null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
+
 
 }

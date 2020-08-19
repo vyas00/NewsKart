@@ -19,42 +19,34 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-   public  String browserUrl;
-
     private static final String TAG = "MainActivity";
 
-
-
-    private static final String USGS_REQUEST_URL =
-            "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
-
-    private NewsItemAdapter newsAdapter;
-    private ArrayList<NewsItem> newsArrayList;
-    RecyclerView newsRecyclerView;
-
-    public  static TextView tvContentChange;
-     public static View btnBackButton;
-     public  static View btnBrowserButton;
-     DatabaseHandler db;
+    public TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvContentChange = (TextView)findViewById(R.id.tv_content);
-        btnBackButton =findViewById(R.id.btn_back);
-        btnBrowserButton =findViewById(R.id.btn_browser);
-        db=new DatabaseHandler(getApplicationContext());
-
-        final SearchView svSearchBox = (SearchView) findViewById(R.id.sv_searchbox);
+        tabLayout=findViewById(R.id.news_tabLayout);
+        tabLayout.addTab(tabLayout.newTab().setText("Global"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sports"));
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new NewsFragment()).commit();
 
 
-        svSearchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+/*        final SearchView svSearchBox = (SearchView) findViewById(R.id.sv_searchbox);*/
+
+
+
+
+/*        svSearchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String inputUrl= "https://newsapi.org/v2/everything?q="+query+"&apiKey=061596553c8c44aa85d0c724d3246163";
@@ -68,66 +60,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
-
-         newsRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
-        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-          newsArrayList =new ArrayList<NewsItem>();
-           NewAsyncTask task = new NewAsyncTask();
-          task.execute(USGS_REQUEST_URL);
-
-
-        Button browser=(Button)findViewById(R.id.btn_browser) ;
-        browser.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                Uri newUri = Uri.parse(browserUrl);
-
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newUri);
-                startActivity(websiteIntent);
-
-            }
-        });
-
-
-/*        newRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                New currentnew = mAdapter.getItem(position);
-                TextView contentchange= (TextView)findViewById(R.id.content_text_view);
-                contentchange.setVisibility(View.VISIBLE);
-                contentchange.setText(currentnew.getContent());
-                View backbutton=findViewById(R.id.back_button);
-                backbutton.setVisibility(View.VISIBLE);
-
-                View browserbutton=findViewById(R.id.browser_button);
-                browserbutton.setVisibility(View.VISIBLE);
-                ReturnUrl(currentnew.getBrowserUrl());
-
-            }
         });*/
 
 
 
     }
-public void clearText(View view)
-{
-BackbuttonCalling();
+/*
 
-}
-public void setvisibilityChanges()
-{
-    tvContentChange.setVisibility(View.VISIBLE);
-    btnBackButton.setVisibility(View.VISIBLE);
-    btnBrowserButton.setVisibility(View.VISIBLE);
-}
-public static void setContentAfterVisibility(String input)
-{
-    tvContentChange.setText(input);
-}
 public void tech(View view)
 {
     String inputUrl= "https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=061596553c8c44aa85d0c724d3246163";
@@ -216,11 +155,13 @@ public void tech(View view)
         task.execute(inputUrl);
 
     }
+*/
 
 
-    private class NewAsyncTask extends AsyncTask<String, Void, List<NewsItem>> {
+/*    private class NewAsyncTask extends AsyncTask<String, Void, List<NewsItem>> {
 
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected List<NewsItem> doInBackground(String... urls) {
 
@@ -247,7 +188,7 @@ public void tech(View view)
         }
 
 
-    }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void ScheduleJob()
@@ -266,29 +207,5 @@ public void tech(View view)
             Log.d(TAG, "Job scheduling failed");
         }
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    protected void onDestroy() {
-        ScheduleJob();
-        super.onDestroy();
-    }
-
-    private void BackbuttonCalling(){
-
-TextView content= (TextView)findViewById(R.id.tv_content);
-content.setText(null);
-content.setVisibility(View.GONE);
-        View backbutton=findViewById(R.id.btn_back);
-        backbutton.setVisibility(View.GONE);
-        View onchrome=findViewById(R.id.btn_browser);
-        onchrome.setVisibility(View.GONE);
-
-    }
-
-public  void returnUrl(String url)
-{
- browserUrl=url;
-}
 
 }

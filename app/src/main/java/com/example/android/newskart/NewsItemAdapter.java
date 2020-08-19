@@ -1,13 +1,19 @@
 package com.example.android.newskart;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ParseException;
@@ -24,10 +30,12 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
 
     Context context;
     private  ArrayList<NewsItem> news;
+    Activity activity;
 
-    public NewsItemAdapter(Context context, ArrayList<NewsItem> news) {
+    public NewsItemAdapter(Context context,Activity activity, ArrayList<NewsItem> news) {
         this.context=context;
         this.news=news;
+        this.activity=activity;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
@@ -42,12 +50,34 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            MainActivity mainActivity=new MainActivity();
-            mainActivity.setvisibilityChanges();
+
             int position=getAdapterPosition();
             NewsItem currentNewsItem = news.get(position);
-            MainActivity.setContentAfterVisibility(currentNewsItem.getContent());
-            mainActivity.returnUrl(currentNewsItem.getBrowserUrl());
+            final String browserUrl=currentNewsItem.getBrowserUrl();
+            final  String message=currentNewsItem.getDiscription();
+            final String content=currentNewsItem.getContent();
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(context);
+
+            builder.setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("Read more", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Uri newUri = Uri.parse(browserUrl);
+                            Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newUri);
+                            activity.startActivity(websiteIntent);
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.setTitle(content);
+            alert.show();
         }
     }
     @NonNull

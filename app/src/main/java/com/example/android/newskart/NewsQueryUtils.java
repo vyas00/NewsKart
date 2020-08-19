@@ -1,7 +1,6 @@
 package com.example.android.newskart;
 
 import android.content.Context;
-import android.graphics.drawable.Icon;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.text.TextUtils;
@@ -28,10 +27,10 @@ import java.util.List;
 
 public class NewsQueryUtils {
 
-
     private static final String TAG = "NewsQueryUtils";
    private static Context context;
    static DatabaseHandler db;
+
     public NewsQueryUtils(Context context) {
         this.context=context;
     }
@@ -131,7 +130,7 @@ public NewsQueryUtils(){}
 
 
                List<NewsItem> news = new ArrayList<>();
-              db=new DatabaseHandler(context);
+               db=new DatabaseHandler(context);
 
 
         try {
@@ -139,8 +138,9 @@ public NewsQueryUtils(){}
             JSONObject baseJsonResponse = new JSONObject(newJSON);
 
             JSONArray newArray = baseJsonResponse.getJSONArray("articles");
-             if(db.getNewsCount()==20){db.deleteTableNews(); db=new DatabaseHandler(context);
-                 Log.d(TAG, "extractFeatureFromJson: "+ "delete table successful");}
+/*             if(db.getNewsCount()==20)
+             {db.emptyTableNews();
+                 Log.d(TAG, "extractFeatureFromJson: "+ "empty table successful");}*/
             for (int i = 0; i < newArray.length(); i++) {
 
                 JSONObject currentNew = newArray.getJSONObject(i);
@@ -152,9 +152,18 @@ public NewsQueryUtils(){}
                 String Content = currentNew.getString("content");
 
                 NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl);
-                Log.d(TAG, "extractFeatureFromJson: "+ getLongEpochTime(Date));
                 news.add(nnew);
-                db.addNews(nnew);
+
+                if(db.getNewsCount()==0){db.addNews(nnew);}
+              else if(db.isNewsItemPresent(getLongEpochTime(Date))==false)
+                {
+                    db.addNews(nnew);
+                    if(db.getNewsCount()>18) {
+                        ArrayList<NewsItem> sortedNewsItem=db.getAllNews();
+                        db.deleteThisNewsItem(sortedNewsItem.get(sortedNewsItem.size() - 1).getEpochTime());
+                    }
+                }
+
             }
         } catch (JSONException e) {
 
@@ -163,7 +172,6 @@ public NewsQueryUtils(){}
 
         return news;
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
