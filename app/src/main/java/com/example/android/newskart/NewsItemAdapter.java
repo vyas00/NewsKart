@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHolder> {
-/*    private static final String LOCATION_SEPARATOR = "T";
-    private static final String SEPARATOR = "Z";*/
-  /*  private static final String SEPARAT = "GMT+";*/
+
     private static final String TAG = "NewsItemAdapter";
 
     Context context;
@@ -47,14 +35,14 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
-        TextView tvTitleView;
-        TextView tvDateView;
-        ImageView ivImageView;
+        TextView tvTitle;
+        TextView tvDate;
+        ImageView ivNewsImage;
         public ViewHolder(@NonNull View view) {
             super(view);
-            tvTitleView =(TextView)view.findViewById(R.id.title_text_view);
-            tvDateView = (TextView)view.findViewById(R.id.date_text_view);
-            ivImageView=(ImageView)view.findViewById(R.id.iv_news_image);
+            tvTitle =(TextView)view.findViewById(R.id.title_text_view);
+            tvDate = (TextView)view.findViewById(R.id.date_text_view);
+            ivNewsImage =(ImageView)view.findViewById(R.id.iv_news_image);
             view.setOnClickListener(this);
         }
 
@@ -104,9 +92,8 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
     public void onBindViewHolder(@NonNull final NewsItemAdapter.ViewHolder holder, int position) {
         final NewsItem currentNewsItem = news.get(position);
 
-        holder.tvTitleView.setText(currentNewsItem.getTitle());
-       holder.tvDateView.setText(getTimeStamp(currentNewsItem.getEpochTime()));
-
+        holder.tvTitle.setText(currentNewsItem.getTitle());
+        holder.tvDate.setText(getTimeStamp(currentNewsItem.getEpochTime()));
         /*String Ddate;
         String Ttime;
         String originalTime;

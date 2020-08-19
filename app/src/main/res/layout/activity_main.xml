@@ -31,22 +31,29 @@
         android:textSize="18.5sp"
         android:visibility="gone" />-->
 
-    <com.google.android.material.tabs.TabLayout
+<!--    <com.google.android.material.tabs.TabLayout
         android:id="@+id/news_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         >
-    </com.google.android.material.tabs.TabLayout>
-
-
+    </com.google.android.material.tabs.TabLayout>-->
 
     <FrameLayout
-        android:id="@+id/frame_container"
-        android:layout_margin="10dp"
+        android:id="@+id/frame_container_category"
         android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_margin="10dp"
+        >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_container_news"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="match_parent"
-        android:layout_below="@+id/news_tabLayout"
+        android:layout_below="@+id/frame_container_category"
         >
 
     </FrameLayout>

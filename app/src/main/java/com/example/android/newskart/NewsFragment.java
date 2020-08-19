@@ -19,8 +19,6 @@ import java.util.List;
 
 public class NewsFragment extends Fragment {
 
-    private static final String USGS_REQUEST_URL =
-            "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
     private static final String TAG = "NewsFragment";
     private NewsItemAdapter newsAdapter;
@@ -45,12 +43,12 @@ public class NewsFragment extends Fragment {
           db=new DatabaseHandler(getContext());
 
 
-        newsRecyclerView = (RecyclerView) viewNewsFragment.findViewById(R.id.recycler_list);
+        newsRecyclerView = (RecyclerView) viewNewsFragment.findViewById(R.id.recycler_list_news);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         newsArrayList =new ArrayList<NewsItem>();
         NewAsyncTask task = new NewAsyncTask();
-        task.execute(USGS_REQUEST_URL);
+        task.execute((MainActivity.getQuerryUrl()));
 
         return viewNewsFragment;
     }
@@ -83,7 +81,10 @@ public class NewsFragment extends Fragment {
                 newsRecyclerView.setAdapter(newsAdapter);
             }
         }
+    }
 
+    private static void setURLQUerry(String querry)
+    {
 
     }
 }

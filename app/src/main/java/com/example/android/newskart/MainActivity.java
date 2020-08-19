@@ -1,43 +1,24 @@
 package com.example.android.newskart;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    public TabLayout tabLayout;
+    public static String USGS_REQUEST_URL =
+            "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tabLayout=findViewById(R.id.news_tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Global"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sports"));
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new NewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment()).commit();
 
 
 
@@ -65,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public static String getQuerryUrl()
+    {
+        return USGS_REQUEST_URL;
+    }
+
+    public static void setQuerryUrl(String querry)
+    {
+        USGS_REQUEST_URL="https://newsapi.org/v2/everything?q="+querry+"&apiKey=061596553c8c44aa85d0c724d3246163";
+    }
+
 /*
 
 public void tech(View view)
@@ -190,22 +182,6 @@ public void tech(View view)
 
     }*/
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void ScheduleJob()
-    {
-        ComponentName componentJobName = new ComponentName(this, JobSchedulerService.class);
-        JobInfo info = new JobInfo.Builder(100, componentJobName)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(true)
-                .setPeriodic(3 * 60 * 60 * 1000)
-                .build();
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled");
-        } else {
-            Log.d(TAG, "Job scheduling failed");
-        }
-    }
+
 
 }

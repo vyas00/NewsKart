@@ -156,7 +156,7 @@ public NewsQueryUtils(){}
                 news.add(nnew);
 
                 if(db.getNewsCount()==0){db.addNews(nnew);}
-              else if(db.isNewsItemPresent(getLongEpochTime(Date))==false)
+                else if(db.isNewsItemPresent(getLongEpochTime(Date))==false)
                 {
                     db.addNews(nnew);
                     if(db.getNewsCount()>18) {
