@@ -24,6 +24,8 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
 
     private static final String TAG = "NewsItemAdapter";
 
+
+
     Context context;
     private  ArrayList<NewsItem> news;
     Activity activity;
@@ -50,6 +52,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         public void onClick(View v) {
 
             int position=getAdapterPosition();
+
             NewsItem currentNewsItem = news.get(position);
             final String browserUrl=currentNewsItem.getBrowserUrl();
             final  String message=currentNewsItem.getDiscription();
@@ -91,6 +94,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final NewsItemAdapter.ViewHolder holder, int position) {
         final NewsItem currentNewsItem = news.get(position);
+
 
         holder.tvTitle.setText(currentNewsItem.getTitle());
         holder.tvDate.setText(getTimeStamp(currentNewsItem.getEpochTime()));

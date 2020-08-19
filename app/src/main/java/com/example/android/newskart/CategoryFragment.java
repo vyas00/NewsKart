@@ -27,6 +27,7 @@ public class CategoryFragment extends Fragment {
     private final String HEALTH="Health";
     private final String ENTERTAINMENT="Fun";
     private final String GAMING="Gaming";
+    private final String TECH="Tech";
 
 
     RecyclerView categoryRecyclerView;
@@ -57,6 +58,7 @@ public class CategoryFragment extends Fragment {
         categoryList.add(HEALTH);
         categoryList.add(ENTERTAINMENT);
         categoryList.add(GAMING);
+        categoryList.add(TECH);
 
         categoryAdapter = new CategoryAdapter(getContext(), getActivity(), categoryList);
         categoryRecyclerView.setAdapter(categoryAdapter);

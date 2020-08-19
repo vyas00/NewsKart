@@ -4,21 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.google.android.material.tabs.TabLayout;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    public static String USGS_REQUEST_URL =
+    public String usgsRequestUrl =
             "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl)).commit();
 
 
 
@@ -47,15 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static String getQuerryUrl()
-    {
-        return USGS_REQUEST_URL;
-    }
-
-    public static void setQuerryUrl(String querry)
-    {
-        USGS_REQUEST_URL="https://newsapi.org/v2/everything?q="+querry+"&apiKey=061596553c8c44aa85d0c724d3246163";
-    }
 
 /*
 

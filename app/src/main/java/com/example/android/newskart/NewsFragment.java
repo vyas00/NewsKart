@@ -25,8 +25,10 @@ public class NewsFragment extends Fragment {
     private ArrayList<NewsItem> newsArrayList;
     RecyclerView newsRecyclerView;
     DatabaseHandler db;
+    public String requestUrl;
 
-    public NewsFragment() {
+    public NewsFragment(String url) {
+        requestUrl=url;
     }
 
 
@@ -47,8 +49,10 @@ public class NewsFragment extends Fragment {
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         newsArrayList =new ArrayList<NewsItem>();
+
         NewAsyncTask task = new NewAsyncTask();
-        task.execute((MainActivity.getQuerryUrl()));
+
+          task.execute(requestUrl);
 
         return viewNewsFragment;
     }
