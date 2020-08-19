@@ -6,6 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -69,6 +74,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
             int position=getAdapterPosition();
 
             NewsItem currentNewsItem = news.get(position);
+            Log.d(TAG, "onClick: imame url" +currentNewsItem.getImageUrl());
             final String browserUrl=currentNewsItem.getBrowserUrl();
             final  String message=currentNewsItem.getDiscription();
             final String content=currentNewsItem.getContent();
@@ -94,6 +100,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
             AlertDialog alert = builder.create();
             alert.setTitle(content);
             alert.show();
+
         }
     }
     @NonNull
@@ -121,7 +128,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         else if(url.equals(GAMING_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_game);
         else if(url.equals(TECH_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_tech);
 
-        new DownloadImage(holder.ivNewsImage).execute(currentNewsItem.getImageUrl());
+        if(currentNewsItem.getImageUrl().equals("null")==false) new DownloadImage(holder.ivNewsImage).execute(currentNewsItem.getImageUrl());
     }
 
     @Override
@@ -158,9 +165,10 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            bmImage.setImageBitmap((result));
         }
     }
+
 
 }
 
