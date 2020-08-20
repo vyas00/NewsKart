@@ -8,13 +8,12 @@
     android:orientation="vertical">
 
 
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:layout_gravity="center"
-        android:src="@drawable/ic_global"
+        android:src="@drawable/ic_news_global"
         android:id="@+id/iv_news_image" />
 
     <LinearLayout

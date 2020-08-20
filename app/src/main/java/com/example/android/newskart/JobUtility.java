@@ -21,7 +21,8 @@ public class JobUtility {
         ComponentName componentJobName = new ComponentName(context, JobSchedulerService.class);
         JobInfo info = new JobInfo.Builder(100, componentJobName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setOverrideDeadline(3*60*60*1000)
+                .setMinimumLatency(3*60*60*1000)
+                .setOverrideDeadline(10*60*1000)
                 .build();
         JobScheduler scheduler = (JobScheduler) context.getSystemService(context.JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);

@@ -25,7 +25,6 @@ public class JobSchedulerService extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
         doBackgroundWork(params);
-        JobUtility.scheduleNewsJob(getApplicationContext());
         return true;
     }
 
@@ -41,9 +40,12 @@ public class JobSchedulerService extends JobService {
                     NewsQueryUtils newsQueryUtils=new NewsQueryUtils();
                     newsQueryUtils.fetchNewData(USGS_REQUEST_URL);
                 Log.d(TAG, "Job finished");
-                jobFinished(params, true);
+                jobFinished(params, false);
+
+                JobUtility.scheduleNewsJob(getApplicationContext());
             }
         }).start();
+
     }
 
     @Override

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.job.JobScheduler;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,18 +21,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl)).commit();
 
+
         JobSharedPreference.setContext(getApplicationContext());
 
-        Log.d(TAG, "onCreate: previous long time "+ JobSharedPreference.getLongTime());
-/*        if(System.currentTimeMillis()-JobSharedPreference.getLongTime()< 3*60*60*1000) {
+        if(JobSharedPreference.getPreviousLongTime()==null){
+            Log.d(TAG, "onCreate: if condition for null entered for the first time");
             JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-          if(JobUtility.isJobServiceOn(getApplicationContext())) scheduler.cancel(100);
+            if(JobUtility.isJobServiceOn(getApplicationContext())) scheduler.cancel(100);
             JobUtility.scheduleNewsJob(getApplicationContext());
-        }*/
+
+        }
+        else{
+            if(System.currentTimeMillis()-JobSharedPreference.getPreviousLongTime()< 3*60*60*1000) {
+                JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+                if(JobUtility.isJobServiceOn(getApplicationContext())) scheduler.cancel(100);
+                JobUtility.scheduleNewsJob(getApplicationContext());
+                Log.d(TAG, "onCreate: jobutility called");
+            }
+        }
+        JobSharedPreference.setPreviousLongTime(System.currentTimeMillis());
 
 /*        db=new DatabaseHandler(getApplicationContext());
         db.emptyTableNews();*/

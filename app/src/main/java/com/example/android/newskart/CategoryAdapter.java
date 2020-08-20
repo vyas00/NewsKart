@@ -85,6 +85,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 NewsFragment newsFragment=new NewsFragment(GLOBAL_URL);
                 String currentStringItem = categoryList.get(position);
 
+
                 if(currentStringItem.equals(GLOBAL)) {newsFragment= new NewsFragment(GLOBAL_URL); }
                 else if(currentStringItem.equals(SPORTS)) {
                     Log.d(TAG, "onClick: sports clicked"); newsFragment= new NewsFragment(SPORTS_URL); }
@@ -108,6 +109,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         else if(currentCategory.equals(ENTERTAINMENT)){holder.ivCategoryImage.setImageResource(R.drawable.ic_entertainment); }
         else if(currentCategory.equals(GAMING)){holder.ivCategoryImage.setImageResource(R.drawable.ic_game); }
         else if(currentCategory.equals(TECH)){holder.ivCategoryImage.setImageResource(R.drawable.ic_tech); }
+        else{}
     }
 
     @Override

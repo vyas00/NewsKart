@@ -9,7 +9,8 @@ public class JobSharedPreference {
     Context context;
     private static final String TAG = "JobSharedPreference";
 
-    private static final String LONG_TIME_KEY ="time";
+/*    private static final String LONG_CURRENT_TIME_KEY ="time";*/
+    private static final String LONG_PREVIOUS_TIME_KEY ="ptime";
 
 
     private static final String JOB_PREF ="job";
@@ -31,15 +32,25 @@ public class JobSharedPreference {
 
     }
 
-
-    public static  void setLongTime(Long longTime) {
-        editor.putLong(LONG_TIME_KEY,longTime).commit();
+/*
+    public static  void setCurrentLongTime(Long longTime) {
+        editor.putLong(LONG_CURRENT_TIME_KEY,longTime).commit();
     }
 
 
-    public static Long getLongTime() {
-        return eSharedPref.getLong(LONG_TIME_KEY,0);
+    public static Long getCurrentLongTime() {
+        return eSharedPref.getLong(LONG_CURRENT_TIME_KEY,0);
+    }
+*/
+
+
+    public static  void setPreviousLongTime(Long longTime) {
+        editor.putLong(LONG_PREVIOUS_TIME_KEY,longTime).commit();
     }
 
+
+    public static Long getPreviousLongTime() {
+        return eSharedPref.getLong(LONG_PREVIOUS_TIME_KEY,0);
+    }
 
 }

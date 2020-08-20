@@ -34,7 +34,7 @@ public class NewsQueryUtils {
     public NewsQueryUtils(Context context) {
         this.context=context;
     }
-public NewsQueryUtils(){}
+     public NewsQueryUtils(){}
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public List<NewsItem> fetchNewData(String requestUrl) {

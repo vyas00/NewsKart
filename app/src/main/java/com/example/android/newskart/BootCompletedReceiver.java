@@ -1,9 +1,6 @@
 package com.example.android.newskart;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,7 +17,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                  String action = intent.getAction();
                  Log.d(TAG,action + " received");
                JobSharedPreference.setContext(context);
-               if(System.currentTimeMillis()- JobSharedPreference.getLongTime()<30*60*100)
+               if(System.currentTimeMillis()- JobSharedPreference.getPreviousLongTime()<30*60*100)
                {
 
                }
