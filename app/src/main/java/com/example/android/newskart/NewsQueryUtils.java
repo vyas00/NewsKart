@@ -38,8 +38,8 @@ public class NewsQueryUtils {
         this.context=context;
         tableName=table;
     }
-     public NewsQueryUtils(){
-
+     public NewsQueryUtils(Context c){
+        context=c;
      }
 
 
@@ -62,9 +62,10 @@ public class NewsQueryUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void fetchAllCategoryNewData(ArrayList<String> urlList) {
+    public void fetchAllCategoryNewData(ArrayList<String> urlList, ArrayList<String> table) {
 
         for(int i=0;i<urlList.size();i++) {
+             tableName=table.get(i);
             URL url = createUrl(urlList.get(i));
             String jsonResponse = null;
             try {

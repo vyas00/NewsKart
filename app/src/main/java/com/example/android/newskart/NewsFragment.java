@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,12 +28,13 @@ public class NewsFragment extends Fragment {
     DatabaseHandler db;
     public String requestUrl;
     public String tableName;
-    private SwipeRefreshLayout newsSwipeToUpdateLayout;
+    public SwipeRefreshLayout newsSwipeToUpdateLayout;
 
     public NewsFragment(String url,String table) {
         requestUrl=url;
         tableName=table;
     }
+    public NewsFragment(){}
 
 
     @Override
@@ -92,12 +94,22 @@ public class NewsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Toast.makeText(getActivity(), "News has been updated!", Toast.LENGTH_LONG).show();
             newsSwipeToUpdateLayout.setRefreshing(false);
             newsArrayList=db.getAllNews(tableName);
             newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList,requestUrl);
             newsRecyclerView.setAdapter(newsAdapter);
         }
 
+    }
+
+    public void setSpinningRefreshTrue()
+    {
+        newsSwipeToUpdateLayout.setRefreshing(true);
+    }
+    public void setSpinningRefreshFalse()
+    {
+        newsSwipeToUpdateLayout.setRefreshing(false);
     }
 
 

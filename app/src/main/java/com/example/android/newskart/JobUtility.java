@@ -67,7 +67,7 @@ public class JobUtility {
         }
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context,"channel_id_1")
-                        .setSmallIcon(R.mipmap.logo)
+                        .setSmallIcon(R.drawable.ic_news_global)
                         .setContentTitle("New updates to read")
                         .setContentText("Tap to visit new updates")
                         .setAutoCancel(true)

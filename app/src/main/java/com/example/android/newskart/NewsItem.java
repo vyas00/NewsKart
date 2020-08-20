@@ -1,5 +1,7 @@
 package com.example.android.newskart;
 
+import java.sql.Blob;
+
 public class NewsItem {
     private static final String TAG = "NewsItem";
 
@@ -17,7 +19,7 @@ public class NewsItem {
 
      public NewsItem(){}
 
-    public NewsItem(String title, String discription, long epochTime, String content, String browserUrl,String imageUrl)
+    public NewsItem(String title, String discription, long epochTime, String content, String browserUrl, String imageUrl)
     {
         this.title=title;
         this.discription=discription;

@@ -28,13 +28,26 @@ public class JobSchedulerService extends JobService {
     private final String GAMING_URL="https://newsapi.org/v2/everything?q=gaming&apiKey=061596553c8c44aa85d0c724d3246163";
     private final String TECH_URL="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=061596553c8c44aa85d0c724d3246163";
 
+
+    private static final String TABLE_GLOBAL_NEWS = "news";
+    private static final String TABLE_SPORTS_NEWS = "sports";
+    private static final String TABLE_BUSNINESS_NEWS = "business";
+    private static final String TABLE_HEALTH_NEWS = "health";
+    private static final String TABLE_FUN_NEWS = "fun";
+    private static final String TABLE_GAMING_NEWS = "gaming";
+    private static final String TABLE_TECH_NEWS = "tech";
+
     private ArrayList<String> urlList;
+    private ArrayList<String> tableList;
     private boolean jobCancelled = false;
 
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
         urlList=new ArrayList<String>();urlList.add(GLOBAL_URL);
+        tableList=new ArrayList<>();
+        tableList.add(TABLE_GLOBAL_NEWS);tableList.add(TABLE_SPORTS_NEWS);tableList.add(TABLE_BUSNINESS_NEWS);
+        tableList.add(TABLE_HEALTH_NEWS);tableList.add(TABLE_FUN_NEWS);tableList.add(TABLE_GAMING_NEWS);tableList.add(TABLE_TECH_NEWS);
         urlList.add(SPORTS_URL);urlList.add(BUSINESS_URL);urlList.add(HEALTH_URL);
         urlList.add(ENTERTAINMENT_URL);urlList.add(GAMING_URL);urlList.add(TECH_URL);
         doBackgroundWork(params);
@@ -50,8 +63,8 @@ public class JobSchedulerService extends JobService {
                         return;
                     }
                 Log.d(TAG, "run: called in thread");
-                    NewsQueryUtils newsQueryUtils=new NewsQueryUtils();
-                    newsQueryUtils.fetchAllCategoryNewData(urlList);
+                    NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getApplicationContext());
+                    newsQueryUtils.fetchAllCategoryNewData(urlList, tableList);
                 Log.d(TAG, "Job finished");
                 jobFinished(params, false);
 

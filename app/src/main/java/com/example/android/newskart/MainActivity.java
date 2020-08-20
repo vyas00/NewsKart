@@ -4,13 +4,42 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.job.JobScheduler;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+
+
+    private final String GLOBAL_URL= "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String SPORTS_URL="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String BUSINESS_URL="https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String HEALTH_URL="https://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String ENTERTAINMENT_URL="https://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String GAMING_URL="https://newsapi.org/v2/everything?q=gaming&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String TECH_URL="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=061596553c8c44aa85d0c724d3246163";
+
+    private static final String TABLE_SPORTS_NEWS = "sports";
+    private static final String TABLE_BUSNINESS_NEWS = "business";
+    private static final String TABLE_HEALTH_NEWS = "health";
+    private static final String TABLE_FUN_NEWS = "fun";
+    private static final String TABLE_GAMING_NEWS = "gaming";
+    private static final String TABLE_TECH_NEWS = "tech";
+
+    private ArrayList<String> urlList;
+    private ArrayList<String> tableList;
+    private ProgressBar pbUpateNews;
     DatabaseHandler db;
     private static final String TABLE_GLOBAL_NEWS = "news";
     public String usgsRequestUrl =
@@ -21,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        urlList=new ArrayList<String>();urlList.add(GLOBAL_URL);
+        tableList=new ArrayList<>();
+        tableList.add(TABLE_GLOBAL_NEWS);tableList.add(TABLE_SPORTS_NEWS);tableList.add(TABLE_BUSNINESS_NEWS);
+        tableList.add(TABLE_HEALTH_NEWS);tableList.add(TABLE_FUN_NEWS);tableList.add(TABLE_GAMING_NEWS);tableList.add(TABLE_TECH_NEWS);
+        urlList.add(SPORTS_URL);urlList.add(BUSINESS_URL);urlList.add(HEALTH_URL);
+        urlList.add(ENTERTAINMENT_URL);urlList.add(GAMING_URL);urlList.add(TECH_URL);
+        pbUpateNews = (ProgressBar) findViewById(R.id.pb_updatenews);
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_category, new CategoryFragment()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl,TABLE_GLOBAL_NEWS)).commit();
 
@@ -49,12 +86,7 @@ public class MainActivity extends AppCompatActivity {
 /*        db=new DatabaseHandler(getApplicationContext());
         db.emptyTableNews();*/
 
-
-
 /*        final SearchView svSearchBox = (SearchView) findViewById(R.id.sv_searchbox);*/
-
-
-
 
 /*        svSearchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -71,11 +103,74 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });*/
-
-
-
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                NewAsyncTaskToRefeshAll newAsyncTaskToRefeshAll= new NewAsyncTaskToRefeshAll(MainActivity.this);
+                newAsyncTaskToRefeshAll.execute();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private class NewAsyncTaskToRefeshAll extends AsyncTask<Void, Void, Void> {
+
+        protected MainActivity mainActivity;
+
+        public NewAsyncTaskToRefeshAll(MainActivity mainActivityRef) {
+            mainActivity = mainActivityRef;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mainActivity != null) {
+                mainActivity.showProgressBar();
+            }
+        }
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getApplicationContext());
+            newsQueryUtils.fetchAllCategoryNewData(urlList,tableList);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mainActivity != null) {
+                mainActivity.dismissProgressBar();}
+            Toast.makeText(MainActivity.this, "News has been updated", Toast.LENGTH_LONG).show();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl,TABLE_GLOBAL_NEWS)).commit();
+        }
+    }
+
+    private void showProgressBar() {
+        pbUpateNews.setVisibility(View.VISIBLE);
+    }
+
+    private void dismissProgressBar() {
+        pbUpateNews.setVisibility(View.GONE);
+    }
 
 /*
 
