@@ -100,7 +100,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     Log.d(TAG, "onClick: sports clicked"); newsFragment= new NewsFragment(SPORTS_URL,TABLE_SPORTS_NEWS); }
                 else if(currentStringItem.equals(BUSINESS)) { newsFragment= new NewsFragment(BUSINESS_URL,TABLE_BUSNINESS_NEWS); }
                 else if(currentStringItem.equals(HEALTH)) {newsFragment= new NewsFragment(HEALTH_URL,TABLE_HEALTH_NEWS); }
-                else if(currentStringItem.equals(ENTERTAINMENT)) {newsFragment= new NewsFragment(ENTERTAINMENT_URL,TABLE_HEALTH_NEWS); }
+                else if(currentStringItem.equals(ENTERTAINMENT)) {newsFragment= new NewsFragment(ENTERTAINMENT_URL,TABLE_FUN_NEWS); }
                 else if(currentStringItem.equals(GAMING)) {newsFragment= new NewsFragment(GAMING_URL,TABLE_GAMING_NEWS);  }
                 else if(currentStringItem.equals(TECH)) {newsFragment= new NewsFragment(TECH_URL,TABLE_TECH_NEWS);  }
                 ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
