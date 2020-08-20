@@ -13,17 +13,30 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.ArrayList;
+
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobSchedulerService extends JobService {
 
     private static final String TAG = "JobSchedulerService";
-    private static final String USGS_REQUEST_URL =
-            "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
+
+    private final String GLOBAL_URL= "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String SPORTS_URL="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String BUSINESS_URL="https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String HEALTH_URL="https://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String ENTERTAINMENT_URL="https://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String GAMING_URL="https://newsapi.org/v2/everything?q=gaming&apiKey=061596553c8c44aa85d0c724d3246163";
+    private final String TECH_URL="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=061596553c8c44aa85d0c724d3246163";
+
+    private ArrayList<String> urlList;
     private boolean jobCancelled = false;
 
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
+        urlList=new ArrayList<String>();urlList.add(GLOBAL_URL);
+        urlList.add(SPORTS_URL);urlList.add(BUSINESS_URL);urlList.add(HEALTH_URL);
+        urlList.add(ENTERTAINMENT_URL);urlList.add(GAMING_URL);urlList.add(TECH_URL);
         doBackgroundWork(params);
         return true;
     }
@@ -38,7 +51,7 @@ public class JobSchedulerService extends JobService {
                     }
                 Log.d(TAG, "run: called in thread");
                     NewsQueryUtils newsQueryUtils=new NewsQueryUtils();
-                    newsQueryUtils.fetchNewData(USGS_REQUEST_URL);
+                    newsQueryUtils.fetchAllCategoryNewData(urlList);
                 Log.d(TAG, "Job finished");
                 jobFinished(params, false);
 
@@ -57,29 +70,5 @@ public class JobSchedulerService extends JobService {
         return true;
     }
 
-    private void addNotification() {
-        Intent intent = new Intent(JobSchedulerService.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(JobSchedulerService.this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.O)
-        {
-            NotificationChannel channel= new NotificationChannel("channel_id_1", "notification", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager= getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this,"channel_id_1")
-                        .setSmallIcon(R.mipmap.logo)
-                        .setContentTitle("New updates to read")
-                        .setContentText("Tap to visit new updates")
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-        manager.notify(0, builder.build());
-
-        Log.d(TAG, " notification function");
-    }
 }

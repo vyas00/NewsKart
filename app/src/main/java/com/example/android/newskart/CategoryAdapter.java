@@ -30,6 +30,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private final String TECH="Tech";
 
 
+    private static final String TABLE_GLOBAL_NEWS = "news";
+    private static final String TABLE_SPORTS_NEWS = "sports";
+    private static final String TABLE_BUSNINESS_NEWS = "business";
+    private static final String TABLE_HEALTH_NEWS = "health";
+    private static final String TABLE_FUN_NEWS = "fun";
+    private static final String TABLE_GAMING_NEWS = "gaming";
+    private static final String TABLE_TECH_NEWS = "tech";
+
+
     private final String GLOBAL_URL= "https://newsapi.org/v2/top-headlines?country=in&apiKey=061596553c8c44aa85d0c724d3246163";
     private final String SPORTS_URL="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=061596553c8c44aa85d0c724d3246163";
     private final String BUSINESS_URL="https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=061596553c8c44aa85d0c724d3246163";
@@ -82,18 +91,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
                 notifyDataSetChanged();
 
-                NewsFragment newsFragment=new NewsFragment(GLOBAL_URL);
+                NewsFragment newsFragment=new NewsFragment(GLOBAL_URL,TABLE_GLOBAL_NEWS);
                 String currentStringItem = categoryList.get(position);
 
 
-                if(currentStringItem.equals(GLOBAL)) {newsFragment= new NewsFragment(GLOBAL_URL); }
+                if(currentStringItem.equals(GLOBAL)) {newsFragment= new NewsFragment(GLOBAL_URL,TABLE_GLOBAL_NEWS); }
                 else if(currentStringItem.equals(SPORTS)) {
-                    Log.d(TAG, "onClick: sports clicked"); newsFragment= new NewsFragment(SPORTS_URL); }
-                else if(currentStringItem.equals(BUSINESS)) { newsFragment= new NewsFragment(BUSINESS_URL); }
-                else if(currentStringItem.equals(HEALTH)) {newsFragment= new NewsFragment(HEALTH_URL); }
-                else if(currentStringItem.equals(ENTERTAINMENT)) {newsFragment= new NewsFragment(ENTERTAINMENT_URL); }
-                else if(currentStringItem.equals(GAMING)) {newsFragment= new NewsFragment(GAMING_URL);  }
-                else if(currentStringItem.equals(TECH)) {newsFragment= new NewsFragment(TECH_URL);  }
+                    Log.d(TAG, "onClick: sports clicked"); newsFragment= new NewsFragment(SPORTS_URL,TABLE_SPORTS_NEWS); }
+                else if(currentStringItem.equals(BUSINESS)) { newsFragment= new NewsFragment(BUSINESS_URL,TABLE_BUSNINESS_NEWS); }
+                else if(currentStringItem.equals(HEALTH)) {newsFragment= new NewsFragment(HEALTH_URL,TABLE_HEALTH_NEWS); }
+                else if(currentStringItem.equals(ENTERTAINMENT)) {newsFragment= new NewsFragment(ENTERTAINMENT_URL,TABLE_HEALTH_NEWS); }
+                else if(currentStringItem.equals(GAMING)) {newsFragment= new NewsFragment(GAMING_URL,TABLE_GAMING_NEWS);  }
+                else if(currentStringItem.equals(TECH)) {newsFragment= new NewsFragment(TECH_URL,TABLE_TECH_NEWS);  }
                 ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame_container_news, newsFragment).commit();
             }

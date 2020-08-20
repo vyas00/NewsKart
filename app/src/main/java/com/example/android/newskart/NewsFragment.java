@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NewsFragment extends Fragment {
 
@@ -26,9 +26,12 @@ public class NewsFragment extends Fragment {
     RecyclerView newsRecyclerView;
     DatabaseHandler db;
     public String requestUrl;
+    public String tableName;
+    private SwipeRefreshLayout newsSwipeToUpdateLayout;
 
-    public NewsFragment(String url) {
+    public NewsFragment(String url,String table) {
         requestUrl=url;
+        tableName=table;
     }
 
 
@@ -43,6 +46,7 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View viewNewsFragment = inflater.inflate(R.layout.fragment_news, container, false);
           db=new DatabaseHandler(getContext());
+          newsSwipeToUpdateLayout=viewNewsFragment.findViewById(R.id.swipe_refresh_news);
 
 
         newsRecyclerView = (RecyclerView) viewNewsFragment.findViewById(R.id.recycler_list_news);
@@ -50,45 +54,51 @@ public class NewsFragment extends Fragment {
 
         newsArrayList =new ArrayList<NewsItem>();
 
-        NewAsyncTask task = new NewAsyncTask();
+        newsArrayList=db.getAllNews(tableName);
+        newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList,requestUrl);
+        newsRecyclerView.setAdapter(newsAdapter);
 
-          task.execute(requestUrl);
+
+        newsSwipeToUpdateLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        NewAsyncTask task = new NewAsyncTask();
+                         task.execute(requestUrl);
+
+                    }
+                }
+        );
+
 
         return viewNewsFragment;
     }
 
-    private class NewAsyncTask extends AsyncTask<String, Void, List<NewsItem>> {
+    private class NewAsyncTask extends AsyncTask<String, Void, Void> {
 
 
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
-        protected List<NewsItem> doInBackground(String... urls) {
+        protected Void doInBackground(String... urls) {
 
 
             if (urls.length < 1 || urls[0] == null) {
-                return null;
+               return null;
             }
-            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getContext());
-            List<NewsItem> result = newsQueryUtils.fetchNewData(urls[0]);
-            if(result==null) result=db.getAllNews();;
-            return result;
+            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getContext(),tableName);
+             newsQueryUtils.fetchNewData(urls[0]);
+            return null;
         }
-
         @Override
-        protected void onPostExecute(List<NewsItem> data) {
-            newsArrayList.clear();
-
-            if (data != null && !data.isEmpty()) {
-                newsArrayList= (ArrayList<NewsItem>) data;
-                Log.d(TAG, "onPostExecute: "+ db.getNewsCount()+ " no of news items");
-                newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList,requestUrl);
-                newsRecyclerView.setAdapter(newsAdapter);
-            }
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            newsSwipeToUpdateLayout.setRefreshing(false);
+            newsArrayList=db.getAllNews(tableName);
+            newsAdapter = new NewsItemAdapter(getContext(), getActivity(), newsArrayList,requestUrl);
+            newsRecyclerView.setAdapter(newsAdapter);
         }
-    }
-
-    private static void setURLQUerry(String querry)
-    {
 
     }
+
+
 }

@@ -27,33 +27,58 @@ import java.util.List;
 
 public class NewsQueryUtils {
 
-    private static final String TAG = "NewsQueryUtils";
-   private static Context context;
-   static DatabaseHandler db;
 
-    public NewsQueryUtils(Context context) {
+    private static String tableName;
+     private static final String TAG = "NewsQueryUtils";
+     private static Context context;
+      static DatabaseHandler db;
+      private static boolean newNewsAvailable=false;
+
+    public NewsQueryUtils(Context context,String table) {
         this.context=context;
+        tableName=table;
     }
-     public NewsQueryUtils(){}
+     public NewsQueryUtils(){
+
+     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<NewsItem> fetchNewData(String requestUrl) {
+    public void fetchNewData(String requestUrl) {
 
-        URL url = createUrl(requestUrl);
-
-
-        String jsonResponse = null;
-        try {
-            jsonResponse = makeHttpRequest(url);
-        } catch (IOException e) {
-            Log.e(TAG, "Problem making the HTTP request.", e);
-        }
+            URL url = createUrl(requestUrl);
 
 
-        List<NewsItem> news = extractFeatureFromJson(jsonResponse);
+            String jsonResponse = null;
+            try {
+                jsonResponse = makeHttpRequest(url);
+            } catch (IOException e) {
+                Log.e(TAG, "Problem making the HTTP request.", e);
+            }
 
-        return news;
+
+         extractFeatureFromJson(jsonResponse);
+
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void fetchAllCategoryNewData(ArrayList<String> urlList) {
+
+        for(int i=0;i<urlList.size();i++) {
+            URL url = createUrl(urlList.get(i));
+            String jsonResponse = null;
+            try {
+                jsonResponse = makeHttpRequest(url);
+            } catch (IOException e) {
+                Log.e(TAG, "Problem making the HTTP request.", e);
+            }
+
+            extractFeatureFromJson(jsonResponse);
+        }
+        if(newNewsAvailable)JobUtility.addNotification(context);
+
+    }
+
 
 
     private static URL createUrl(String stringUrl) {
@@ -122,10 +147,11 @@ public class NewsQueryUtils {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private static List<NewsItem> extractFeatureFromJson(String newJSON) {
+    private static void extractFeatureFromJson(String newJSON) {
+        newNewsAvailable=false;
 
         if (TextUtils.isEmpty(newJSON)) {
-            return null;
+            return;
         }
 
 
@@ -138,8 +164,8 @@ public class NewsQueryUtils {
             JSONObject baseJsonResponse = new JSONObject(newJSON);
 
             JSONArray newArray = baseJsonResponse.getJSONArray("articles");
-             if(db.getNewsCount()==20)
-             {db.emptyTableNews();
+             if(db.getNewsCount(tableName)==20)
+             {db.emptyTableNews(tableName);
                  Log.d(TAG, "extractFeatureFromJson: "+ "empty table successful");}
             for (int i = 0; i < newArray.length(); i++) {
 
@@ -155,13 +181,13 @@ public class NewsQueryUtils {
                 NewsItem nnew = new NewsItem(Title, Description, getLongEpochTime(Date) , Content, Browserurl,ImageUrl);
                 news.add(nnew);
 
-                if(db.getNewsCount()==0){db.addNews(nnew);}
-                else if(db.isNewsItemPresent(Browserurl)==false)
-                {
-                    db.addNews(nnew);
-                    if(db.getNewsCount()>18) {
-                        ArrayList<NewsItem> sortedNewsItem=db.getAllNews();
-                        db.deleteThisNewsItem(sortedNewsItem.get(sortedNewsItem.size() - 1).getBrowserUrl());
+                if(db.getNewsCount(tableName)==0){db.addNews(nnew,tableName);}
+                else if(db.isNewsItemPresent(Browserurl,tableName)==false)
+                { newNewsAvailable=true;
+                    db.addNews(nnew,tableName);
+                    if(db.getNewsCount(tableName)>18) {
+                        ArrayList<NewsItem> sortedNewsItem=db.getAllNews(tableName);
+                        db.deleteThisNewsItem(sortedNewsItem.get(sortedNewsItem.size() - 1).getBrowserUrl(),tableName);
                     }
                 }
 
@@ -171,7 +197,6 @@ public class NewsQueryUtils {
             Log.e("QueryUtils", "Problem parsing the book JSON results", e);
         }
 
-        return news;
     }
 
 
@@ -188,6 +213,7 @@ public class NewsQueryUtils {
         long epoch = date.getTime();
         return epoch;
     }
+
 
 }
 

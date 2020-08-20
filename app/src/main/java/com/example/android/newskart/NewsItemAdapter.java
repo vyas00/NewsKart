@@ -119,16 +119,18 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.ViewHo
 
         holder.tvTitle.setText(currentNewsItem.getTitle());
         holder.tvDate.setText(getTimeStamp(currentNewsItem.getEpochTime()));
+        holder.ivNewsImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        if(url.equals(GLOBAL_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_news_global); }
+        else if(url.equals(SPORTS_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_sports);}
+        else if(url.equals(BUSINESS_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_business);}
+        else if(url.equals(HEALTH_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_health);}
+        else if(url.equals(ENTERTAINMENT_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_entertainment);}
+        else if(url.equals(GAMING_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_game);}
+        else if(url.equals(TECH_URL)){holder.ivNewsImage.setImageResource(R.drawable.ic_tech);}
 
-        if(url.equals(GLOBAL_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_news_global);
-        else if(url.equals(SPORTS_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_sports);
-        else if(url.equals(BUSINESS_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_business);
-        else if(url.equals(HEALTH_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_health);
-        else if(url.equals(ENTERTAINMENT_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_entertainment);
-        else if(url.equals(GAMING_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_game);
-        else if(url.equals(TECH_URL))holder.ivNewsImage.setImageResource(R.drawable.ic_tech);
-
-        if(currentNewsItem.getImageUrl().equals("null")==false) new DownloadImage(holder.ivNewsImage).execute(currentNewsItem.getImageUrl());
+        if(currentNewsItem.getImageUrl().equals("null")==false){
+            holder.ivNewsImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            new DownloadImage(holder.ivNewsImage).execute(currentNewsItem.getImageUrl());}
     }
 
     @Override
