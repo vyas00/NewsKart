@@ -63,7 +63,7 @@ public class JobSchedulerService extends JobService {
                         return;
                     }
                 Log.d(TAG, "run: called in thread");
-                    NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getApplicationContext());
+                    NewsQueryUtils newsQueryUtils=new NewsQueryUtils(JobSchedulerService.this);
                     newsQueryUtils.fetchAllCategoryNewData(urlList, tableList);
                 Log.d(TAG, "Job finished");
                 jobFinished(params, false);

@@ -28,9 +28,9 @@ import java.util.List;
 public class NewsQueryUtils {
 
 
-    private static String tableName;
-     private static final String TAG = "NewsQueryUtils";
-     private static Context context;
+      private static String tableName;
+      private static final String TAG = "NewsQueryUtils";
+      private static Context context;
       static DatabaseHandler db;
       private static boolean newNewsAvailable=false;
 
@@ -76,6 +76,7 @@ public class NewsQueryUtils {
 
             extractFeatureFromJson(jsonResponse);
         }
+        if(context instanceof MainActivity) newNewsAvailable=false;
         if(newNewsAvailable)JobUtility.addNotification(context);
 
     }
@@ -149,7 +150,7 @@ public class NewsQueryUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private static void extractFeatureFromJson(String newJSON) {
-        newNewsAvailable=false;
+          newNewsAvailable=false;
 
         if (TextUtils.isEmpty(newJSON)) {
             return;
@@ -184,7 +185,7 @@ public class NewsQueryUtils {
 
                 if(db.getNewsCount(tableName)==0){db.addNews(nnew,tableName);}
                 else if(db.isNewsItemPresent(Browserurl,tableName)==false)
-                { newNewsAvailable=true;
+                {   newNewsAvailable=true;
                     db.addNews(nnew,tableName);
                     if(db.getNewsCount(tableName)>18) {
                         ArrayList<NewsItem> sortedNewsItem=db.getAllNews(tableName);

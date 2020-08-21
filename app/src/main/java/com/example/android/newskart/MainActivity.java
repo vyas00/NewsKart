@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -129,17 +130,18 @@ public class MainActivity extends AppCompatActivity {
 
     private class NewAsyncTaskToRefeshAll extends AsyncTask<Void, Void, Void> {
 
-        protected MainActivity mainActivity;
+        private WeakReference<MainActivity> activityWeakReference;
 
         public NewAsyncTaskToRefeshAll(MainActivity mainActivityRef) {
-            mainActivity = mainActivityRef;
+            activityWeakReference = new WeakReference<MainActivity>(mainActivityRef);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (mainActivity != null) {
-                mainActivity.showProgressBar();
+            MainActivity activity = activityWeakReference.get();
+            if (activity != null) {
+                activity.showProgressBar();
             }
         }
         @Override
@@ -150,15 +152,17 @@ public class MainActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected Void doInBackground(Void... voids) {
-            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(getApplicationContext());
+            NewsQueryUtils newsQueryUtils=new NewsQueryUtils(MainActivity.this);
             newsQueryUtils.fetchAllCategoryNewData(urlList,tableList);
             return null;
         }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (mainActivity != null) {
-                mainActivity.dismissProgressBar();}
+            MainActivity activity = activityWeakReference.get();
+            if (activity != null) {
+                activity.dismissProgressBar();
+            }
             Toast.makeText(MainActivity.this, "News has been updated", Toast.LENGTH_LONG).show();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container_news, new NewsFragment(usgsRequestUrl,TABLE_GLOBAL_NEWS)).commit();
         }
